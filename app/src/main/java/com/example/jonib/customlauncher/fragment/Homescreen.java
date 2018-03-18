@@ -20,9 +20,9 @@ public class Homescreen extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_homescreen, container, false);
-        ImageView icon = v.findViewById(R.id.icon);
-        icon.setImageDrawable(MainActivity.getActivityIcon(this.getContext(),
-                "com.android.chrome", "com.google.android.apps.chrome.Main"));
+        ImageView icon = v.findViewById(R.id.icon_app);
+        icon.setImageDrawable(MainActivity.getActivityIcon(this.getContext(), "com.android.chrome",
+                "com.google.android.apps.chrome.Main"));
         icon.setOnClickListener(this);
         return v;
     }
@@ -30,7 +30,7 @@ public class Homescreen extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.icon:
+            case R.id.icon_app:
                 Intent launchIntent = MainActivity.baseContext.
                         getPackageManager().
                         getLaunchIntentForPackage("com.android.chrome");
