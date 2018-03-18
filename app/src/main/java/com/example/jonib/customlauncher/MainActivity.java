@@ -1,13 +1,19 @@
 package com.example.jonib.customlauncher;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.jonib.customlauncher.adapter.RViewAdapter;
 import com.example.jonib.customlauncher.model.AppInfo;
@@ -17,21 +23,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    RViewAdapter r_adapter;
-    List<AppInfo> appsList;
-    RecyclerView recyclerView;
+    public static Context baseContext;
+    private ImageButton apps_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        recyclerView = findViewById(R.id.r_view);
-        r_adapter = new RViewAdapter(this);
-        recyclerView.setAdapter(r_adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        new MyThread().execute();
+        baseContext = this.getBaseContext();
 
     }
 
@@ -40,39 +39,18 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public class MyThread extends AsyncTask<Void, Void, String> {
+    public void appsButtonClicked(View view) {
+        Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
+    }
 
-        @Override
-        protected String doInBackground(Void... Params) {
+    public static Drawable getActivityIcon(Context context, String packageName, String activityName) {
+        PackageManager pm = context.getPackageManager();
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(packageName, activityName));
+        ResolveInfo resolveInfo = pm.resolveActivity(intent, 0);
 
-            PackageManager pm = getPackageManager();
-            appsList = new ArrayList<>();
-
-            Intent i = new Intent(Intent.ACTION_MAIN, null);
-            i.addCategory(Intent.CATEGORY_LAUNCHER);
-
-            List<ResolveInfo> allApps = pm.queryIntentActivities(i, 0);
-            for(ResolveInfo ri:allApps) {
-                AppInfo app = new AppInfo();
-                app.label = (String) ri.loadLabel(pm);
-                app.package_name = ri.activityInfo.packageName;
-                app.icon = ri.activityInfo.loadIcon(pm);
-                r_adapter.addApp(app);
-            }
-            return "Success";
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            updateStuff();
-        }
-
-        public void updateStuff() {
-            r_adapter.notifyItemInserted(r_adapter.getItemCount()-1);
-        }
-
+        return resolveInfo.loadIcon(pm);
     }
 
 }

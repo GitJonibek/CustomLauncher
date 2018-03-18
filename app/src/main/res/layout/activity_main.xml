@@ -6,14 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
+    android:orientation="horizontal"
+    android:gravity="center|bottom"
     tools:context="com.example.jonib.customlauncher.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/r_view"
-        android:background="@android:color/transparent">
+    <ImageButton
+        android:id="@+id/menu_button"
+        android:onClick="appsButtonClicked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_action_apps"/>
 
-    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
